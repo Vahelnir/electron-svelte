@@ -42,10 +42,14 @@ let rendererConfig = {
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
-        })
+        // use: ExtractTextPlugin.extract({
+        //   fallback: 'style-loader',
+        //   use: 'css-loader'
+        // })
+        use: [
+          (process.env.NODE_ENV === 'development') ? MiniCssExtractPlugin.loader : 'style-loader',
+          'css-loader'
+        ]
       },
       {
         test: /\.js$/,
@@ -104,7 +108,10 @@ let rendererConfig = {
     __filename: process.env.NODE_ENV !== 'production'
   },
   plugins: [
-    new ExtractTextPlugin('styles.css'),
+    // new ExtractTextPlugin('styles.css'),
+    new MiniCssExtractPlugin({
+      filename: 'style.css'
+    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
